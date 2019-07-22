@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleAssembly", "ExampleAssembly\ExampleAssembly.csproj", "{251A7FF8-4D39-4F8B-9838-61124BF62F99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeanBattles.Assembly", "BeanBattles.Assembly\BeanBattles.Assembly.csproj", "{251A7FF8-4D39-4F8B-9838-61124BF62F99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMonoInjector", "SharpMonoInjector\SharpMonoInjector.csproj", "{9A2F2E9F-D314-4B7A-BA8D-8522BB91A114}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpMonoInjector", "SharpMonoInjector\SharpMonoInjector.csproj", "{9A2F2E9F-D314-4B7A-BA8D-8522BB91A114}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMonoInjector.Console", "SharpMonoInjector.Console\SharpMonoInjector.Console.csproj", "{E677DE19-10C7-4981-BC7A-F49AE07E3391}"
 EndProject

@@ -1,4 +1,4 @@
-﻿namespace ExampleAssembly
+﻿namespace BeanAssembly
 {
     public class Loader
     {
