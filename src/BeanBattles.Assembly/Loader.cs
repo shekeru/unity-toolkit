@@ -7,7 +7,7 @@
         public static void Load()
         {
             gameObject = new UnityEngine.GameObject();
-            gameObject.AddComponent<Cheat>();
+            gameObject.AddComponent<NiggyHook>();
             UnityEngine.Object.DontDestroyOnLoad(gameObject);
         }
 
