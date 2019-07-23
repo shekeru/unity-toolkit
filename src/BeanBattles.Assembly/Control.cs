@@ -2,34 +2,51 @@
 using UnityEngine.Networking;
 using Prototype.NetworkLobby;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Reflection;
 using System.Linq;
 using System;
+using System.Collections;
 
 namespace BeanAssembly
 {
     public class NiggyHook : MonoBehaviour
     {
-        int ticker = 0; System.Random rng = new System.Random();
-        float MIN_VALUE = -350; float MAX_VALUE = 350; int alt = 0;
-        // State
-        GameManager gameManager; SetUpLocalPlayer localPlayer;
-        List<GameObject> current = new List<GameObject>();
+        // Hack State
+        List<GameObject> players = new List<GameObject>();
+        Dictionary<KeyCode, bool> keys = new Dictionary<KeyCode, bool>();
+        // Unity Classes
+        GameManager gameManager; CustomNetworkManager netManager;
+        SetUpLocalPlayer localPlayer; Extras extras;
+        public void Start() {
+            keys.Add(KeyCode.Keypad9, false);
+        }
         public void Update() {
+            // Update Values
             gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
             localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
+            extras = gameManager.myPlayer.GetComponent<Extras>();
+            // Keybind Checks
+            foreach (var item in keys)
+                keys[item.Key] = Input.GetKeyDown(item.Key);
+            // Update Players
             foreach (var player in gameManager.players) {
                 UpdatePlayer(player);
             }; UpdateLocal();
             // Clear Entries
-            foreach (var player in current)
+            foreach (var player in players)
                 if (!gameManager.players.Contains(player))
-                    current.Remove(player);
+                    players.Remove(player);
         }
         public void OnGUI()
         {
             GUI.contentColor = Color.cyan;
-            GUI.Label(new Rect(500, 10, 200, 40), "Niggyhook v0.3~");
+            GUI.Label(new Rect(10, 10, 200, 40), "Niggyhook, Version 4");
             GUI.contentColor = Color.white; // Game Managers
+            netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
+            GUI.Label(new Rect(10, 600, 200, 40),
+                netManager.steamInfo.steamDisplayName.text);
+            netManager.passwordEntryTitle.text = "--debug";
         }
         private void UpdatePlayer(GameObject player)
         {
@@ -39,15 +56,22 @@ namespace BeanAssembly
                 if (movement.isLocalPlayer) return;
             var local = player.GetComponent<SetUpLocalPlayer>();
             // Display Players
-            if (!current.Contains(player) && movement.enabled 
+            if (!players.Contains(player) && movement.enabled 
                 && !local.isSpectating && local.pname != "player")
             {
               localPlayer.NewTeamMate(player, local.pname, 
-                  local.playerColor); current.Add(player);
+                  local.playerColor); players.Add(player);
              // gameManager.SetUpTeammateHudSingle(player);
             }
+            // And fuck to you too
+            if (keys[KeyCode.Keypad9])
+            {
+                var coords = movement.transform.position;
+                extras.CallCmdAirStrikePos(coords.x, coords.y, 2,
+                   player.GetComponent<NetworkIdentity>().netId);
+            }
         }
-        private void UpdateLocal() {
+        public void FixedUpdate() {
             var movement = gameManager.myPlayerMovement;
             // Enable Rocket Boots
             movement.rocketJumpEnabled = true;
@@ -55,8 +79,10 @@ namespace BeanAssembly
             movement.movementSpeed = 14f;
             movement.sprintSpeed = 24f;
             movement.jumpSpeed = 90f;
+        }
+        private void UpdateLocal() {
             // Change Weapon Manager Values
-            var equips = movement.GetComponent<WeaponManager>();
+            var equips = localPlayer.GetComponent<WeaponManager>();
             var active = equips.weapons[equips.currentWeapon];
             // Zero Recoil Values
             active.additionalSideKick = 0f;
@@ -72,16 +98,8 @@ namespace BeanAssembly
             active.recoveryTime = 1e-6f;
             //active.recovering = false;
             active.fullAuto = true;
-            //Aids(active);
-            localPlayer.rTeams = false;
-            var extras = gameManager.myPlayer.GetComponent<Extras>();
-            //if (ticker++ % 10 <= 0)
-            //{
-            //    extras.CallCmdAirStrikePos((float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE,
-            //        (float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE, (rng.Next(500) > 2 ?4:2),
-            //        player.GetComponent<NetworkIdentity>().netId);
-            //}
             // Friendly Fire
+            localPlayer.rTeams = false;
             //localPlayer.teammates = new List<GameObject>(gameManager.players);
             //localPlayer.teammateNumber = gameManager.players.Length - 1;
             //localPlayer.NetworkteamNumber = localPlayer.teamNumber = -1;
