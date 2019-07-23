@@ -1,12 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using Prototype.NetworkLobby;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Reflection;
 using System.Linq;
-using System;
-using System.Collections;
 
 namespace BeanAssembly
 {
@@ -19,7 +14,7 @@ namespace BeanAssembly
         GameManager gameManager; CustomNetworkManager netManager;
         SetUpLocalPlayer localPlayer; Extras extras;
         public void Start() {
-            keys.Add(KeyCode.Keypad9, false);
+            keys[KeyCode.Keypad9] = false;
         }
         public void Update() {
             // Update Values
@@ -27,11 +22,13 @@ namespace BeanAssembly
             localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
             extras = gameManager.myPlayer.GetComponent<Extras>();
             // Keybind Checks
-            foreach (var item in keys)
-                keys[item.Key] = Input.GetKeyDown(item.Key);
+            try {
+                foreach (var kcode in keys.Keys)
+                    keys[kcode] = Input.GetKeyDown(kcode);
+            } catch {} 
             // Update Players
             foreach (var player in gameManager.players) {
-                UpdatePlayer(player);
+                try { UpdatePlayer(player); } catch {};
             }; UpdateLocal();
             // Clear Entries
             foreach (var player in players)
@@ -50,24 +47,23 @@ namespace BeanAssembly
         }
         private void UpdatePlayer(GameObject player)
         {
-            if (!gameManager.myPlayerMovement.enabled || 
-                localPlayer.isSpectating) return;
             var movement = player.GetComponent<Movement>();
                 if (movement.isLocalPlayer) return;
             var local = player.GetComponent<SetUpLocalPlayer>();
             // Display Players
-            if (!players.Contains(player) && movement.enabled 
-                && !local.isSpectating && local.pname != "player")
+            if (!players.Contains(player) && local.pname != "player" &&
+                gameManager.myPlayerMovement.enabled && movement.enabled
+                && !localPlayer.isSpectating && !local.isSpectating)
             {
               localPlayer.NewTeamMate(player, local.pname, 
                   local.playerColor); players.Add(player);
-             // gameManager.SetUpTeammateHudSingle(player);
             }
             // And fuck to you too
             if (keys[KeyCode.Keypad9])
             {
+                extras.airstrikeDelay = false;
                 var coords = movement.transform.position;
-                extras.CallCmdAirStrikePos(coords.x, coords.y, 2,
+                extras.CallCmdAirStrikePos(coords.x, coords.z, 2,
                    player.GetComponent<NetworkIdentity>().netId);
             }
         }
