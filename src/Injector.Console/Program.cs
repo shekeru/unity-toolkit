@@ -22,7 +22,7 @@ namespace Injector.Console
 
         private static void Inject(Injector injector)
         {
-            string assemblyPath = "BeanAssembly.dll",
+            string assemblyPath = "BeanBattles.dll",
                 @namespace = "BeanAssembly",
                 className = "Loader",
                 methodName = "Load";
