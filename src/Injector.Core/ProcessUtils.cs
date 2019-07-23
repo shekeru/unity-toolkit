@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SharpMonoInjector
+namespace Injector
 {
     public static class ProcessUtils
     {

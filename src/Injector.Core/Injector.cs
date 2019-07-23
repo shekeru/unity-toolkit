@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Linq;
 
-namespace SharpMonoInjector
+namespace Injector
 {
     public class Injector : IDisposable
     {

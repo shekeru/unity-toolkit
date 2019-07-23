@@ -48,16 +48,16 @@ namespace BeanAssembly
                         active.reloading = false;
                         // Meme Shit
                         active.shotgun = true;
-                        active.recoveryTime = 1e-9f;
-                        active.recovering = false;
+                        active.recoveryTime = 1e-4f;
+                        //active.recovering = false;
                         active.fullAuto = true;
                         //Aids(active);
-                        if (ticker++ % 100 <= 0)
-                        {
-                            extras.CallCmdAirStrikePos((float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE,
-                                (float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE, 1 + alt++ % 4,
-                                player.GetComponent<NetworkIdentity>().netId);
-                        }
+                        //if (ticker++ % 10 <= 0)
+                        //{
+                        //    extras.CallCmdAirStrikePos((float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE,
+                        //        (float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE, (rng.Next(500) > 2 ?4:2),
+                        //        player.GetComponent<NetworkIdentity>().netId);
+                        //}
                     }
                 } catch { }
             }
@@ -74,5 +74,13 @@ namespace BeanAssembly
             active.burst = true;
         }
     }
+    enum Raids:long
+    {
+        NONE = 0,
+        GRENADE = 1,
+        AIRSTRIKE = 2,
+        UNKNOWN = 3,
+        SMOKE = 4,
+    };
 }
 

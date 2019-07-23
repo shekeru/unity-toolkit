@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SharpMonoInjector
+namespace Injector
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct MODULEINFO

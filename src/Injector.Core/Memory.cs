@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SharpMonoInjector
+namespace Injector
 {
     public class Memory : IDisposable
     {
