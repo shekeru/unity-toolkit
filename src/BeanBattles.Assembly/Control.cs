@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using Prototype.NetworkLobby;
+using System.Collections.Generic;
 using System;
 
 namespace BeanAssembly
@@ -9,19 +10,33 @@ namespace BeanAssembly
     {
         int ticker = 0; System.Random rng = new System.Random();
         float MIN_VALUE = -350; float MAX_VALUE = 350; int alt = 0;
+        // State
+        GameManager gameManager;
+        HashSet<GameObject> loaded = new HashSet<GameObject>();
+        public void Start()
+        {
+            gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
+        }
+        public void Update() {
+            foreach (var player in gameManager.players) {
+                if (!loaded.Contains(player)) {
+                    gameManager.SetUpTeammateHudSingle(player);
+                }
+            }
+        }
         private void OnGUI()
         {
             int loc = 60; GUI.contentColor = Color.cyan;
             GUI.Label(new Rect(10, 10, 200, 40), "Niggyhook v0.3~");
             GUI.contentColor = Color.yellow; // Game Managers
-            var gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
-            foreach (var player in gameManager.players) {
+            foreach (var player in gameManager.players)
+            {
                 try
                 {
                     var movement = player.GetComponent<Movement>();
                     var local = player.GetComponent<SetUpLocalPlayer>();
                     if (movement.enabled && !movement.isLocalPlayer && !local.isSpectating)
-                    { 
+                    {
                         GUI.Label(new Rect(45, loc += 40, 200, 40),
                             local.pname);
                     }
@@ -59,9 +74,11 @@ namespace BeanAssembly
                         //        player.GetComponent<NetworkIdentity>().netId);
                         //}
                     }
-                } catch { }
+                }
+                catch { }
             }
         }
+        // Privates
         private void BurstFire(Weapon active)
         {
             active.spreadActive = true;
