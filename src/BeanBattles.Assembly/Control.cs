@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using Prototype.NetworkLobby;
 using System.Collections.Generic;
+using System.Linq;
 using System;
 
 namespace BeanAssembly
@@ -19,6 +20,10 @@ namespace BeanAssembly
             foreach (var player in gameManager.players) {
                 UpdatePlayer(player);
             }; UpdateLocal();
+            // Clear Entries
+            foreach (var player in current)
+                if (!gameManager.players.Contains(player))
+                    current.Remove(player);
         }
         public void OnGUI()
         {
@@ -28,11 +33,14 @@ namespace BeanAssembly
         }
         private void UpdatePlayer(GameObject player)
         {
+            if (!gameManager.myPlayerMovement.enabled || 
+                localPlayer.isSpectating) return;
             var movement = player.GetComponent<Movement>();
                 if (movement.isLocalPlayer) return;
             var local = player.GetComponent<SetUpLocalPlayer>();
             // Display Players
-            if (!current.Contains(player))
+            if (!current.Contains(player) && movement.enabled 
+                && !local.isSpectating && local.pname != "player")
             {
               localPlayer.NewTeamMate(player, local.pname, 
                   local.playerColor); current.Add(player);
@@ -65,6 +73,7 @@ namespace BeanAssembly
             //active.recovering = false;
             active.fullAuto = true;
             //Aids(active);
+            localPlayer.rTeams = false;
             var extras = gameManager.myPlayer.GetComponent<Extras>();
             //if (ticker++ % 10 <= 0)
             //{
@@ -73,9 +82,9 @@ namespace BeanAssembly
             //        player.GetComponent<NetworkIdentity>().netId);
             //}
             // Friendly Fire
-            localPlayer.teammates = new List<GameObject>(gameManager.players);
-            localPlayer.teammateNumber = gameManager.players.Length - 1;
-            localPlayer.rTeams = false;
+            //localPlayer.teammates = new List<GameObject>(gameManager.players);
+            //localPlayer.teammateNumber = gameManager.players.Length - 1;
+            //localPlayer.NetworkteamNumber = localPlayer.teamNumber = -1;
         }
         // Privates
         private void BurstFire(Weapon active)
