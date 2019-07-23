@@ -13,69 +13,61 @@ namespace BeanAssembly
         // State
         GameManager gameManager;
         HashSet<GameObject> loaded = new HashSet<GameObject>();
-        public void Start()
-        {
-            gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
-        }
         public void Update() {
+            gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
             foreach (var player in gameManager.players) {
-                if (!loaded.Contains(player)) {
-                    gameManager.SetUpTeammateHudSingle(player);
-                }
+                UpdatePlayer(player);
             }
         }
-        private void OnGUI()
+        public void OnGUI()
         {
-            int loc = 60; GUI.contentColor = Color.cyan;
-            GUI.Label(new Rect(10, 10, 200, 40), "Niggyhook v0.3~");
-            GUI.contentColor = Color.yellow; // Game Managers
-            foreach (var player in gameManager.players)
+            GUI.contentColor = Color.cyan;
+            GUI.Label(new Rect(500, 5, 200, 40), "Niggyhook v0.3~");
+            GUI.contentColor = Color.white; // Game Managers
+        }
+        private void UpdatePlayer(GameObject player)
+        {
+            var movement = player.GetComponent<Movement>();
+            var local = player.GetComponent<SetUpLocalPlayer>();
+            // Display Players
+            if (!loaded.Contains(player) && movement.enabled && !movement.isLocalPlayer)
             {
-                try
-                {
-                    var movement = player.GetComponent<Movement>();
-                    var local = player.GetComponent<SetUpLocalPlayer>();
-                    if (movement.enabled && !movement.isLocalPlayer && !local.isSpectating)
-                    {
-                        GUI.Label(new Rect(45, loc += 40, 200, 40),
-                            local.pname);
-                    }
-                    if (movement.isLocalPlayer)
-                    {
-                        var extras = player.GetComponent<Extras>();
-                        // Enable Rocket Boots
-                        movement.rocketJumpEnabled = true;
-                        movement.boostPower = 100f;
-                        movement.movementSpeed = 14f;
-                        movement.sprintSpeed = 24f;
-                        movement.jumpSpeed = 90f;
-                        // Change Weapon Manager Values
-                        var equips = movement.GetComponent<WeaponManager>();
-                        var active = equips.weapons[equips.currentWeapon];
-                        // Zero Recoil Values
-                        active.additionalSideKick = 0f;
-                        active.verticalKick = 0f;
-                        active.sideKick = 0f;
-                        // Better Shot Handling
-                        active.bulletSpeed = 1e6f;
-                        active.reloadTime = 1e-9f;
-                        active.currentclip = 500;
-                        active.reloading = false;
-                        // Meme Shit
-                        active.shotgun = true;
-                        active.recoveryTime = 1e-4f;
-                        //active.recovering = false;
-                        active.fullAuto = true;
-                        //Aids(active);
-                        //if (ticker++ % 10 <= 0)
-                        //{
-                        //    extras.CallCmdAirStrikePos((float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE,
-                        //        (float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE, (rng.Next(500) > 2 ?4:2),
-                        //        player.GetComponent<NetworkIdentity>().netId);
-                        //}
-                    }
-                }
-                catch { }
+                gameManager.SetUpTeammateHudSingle(player); loaded.Add(player);
+            }
+            // Local Player
+            if (movement.isLocalPlayer)
+            {
+                var extras = player.GetComponent<Extras>();
+                // Enable Rocket Boots
+                movement.rocketJumpEnabled = true;
+                movement.boostPower = 100f;
+                movement.movementSpeed = 14f;
+                movement.sprintSpeed = 24f;
+                movement.jumpSpeed = 90f;
+                // Change Weapon Manager Values
+                var equips = movement.GetComponent<WeaponManager>();
+                var active = equips.weapons[equips.currentWeapon];
+                // Zero Recoil Values
+                active.additionalSideKick = 0f;
+                active.verticalKick = 0f;
+                active.sideKick = 0f;
+                // Better Shot Handling
+                active.bulletSpeed = 1e6f;
+                active.reloadTime = 1e-9f;
+                active.currentclip = 500;
+                active.reloading = false;
+                // Meme Shit
+                active.shotgun = true;
+                active.recoveryTime = 1e-6f;
+                //active.recovering = false;
+                active.fullAuto = true;
+                //Aids(active);
+                //if (ticker++ % 10 <= 0)
+                //{
+                //    extras.CallCmdAirStrikePos((float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE,
+                //        (float)rng.NextDouble() * (MAX_VALUE - MIN_VALUE) + MIN_VALUE, (rng.Next(500) > 2 ?4:2),
+                //        player.GetComponent<NetworkIdentity>().netId);
+                //}
             }
         }
         // Privates
