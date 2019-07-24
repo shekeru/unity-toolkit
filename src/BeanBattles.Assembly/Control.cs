@@ -30,8 +30,7 @@ namespace BeanAssembly
             // Keybind Checks
             try {
                 foreach (var kcode in keys.Keys)
-                    if (Input.GetKeyDown((KeyCode) kcode))
-                        keys[kcode] ^= true;
+                    keys[kcode] = Input.GetKeyDown((KeyCode)kcode);
             } catch {} 
             // Update Players
             foreach (var player in gameManager.players) {
@@ -83,10 +82,12 @@ namespace BeanAssembly
             movement.sprintSpeed = 24f;
             movement.jumpSpeed = 90f;
             // Visual Queues
-            if (keys[Keys.Testing]) {
-                movement.anim.SetBool("isSprinting", false);
-                movement.anim.SetBool("isWalking", false);
-            }
+            movement.ResetFeet();
+            movement.ResetRunAN();
+            movement.isWalking = false;
+            movement.isSprinting = false;
+            movement.anim.SetBool("isWalking", false);
+            movement.anim.SetBool("isSprinting", false);
         }
         private void UpdateLocal() {
             // Change Weapon Manager Values
