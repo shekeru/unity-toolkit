@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -27,13 +28,30 @@ namespace BeanAssembly
             if (keys[KeyManager.AirStrike])
             {
                 var coords = movement.transform.position;
-                extras.CallCmdAirStrikePos(coords.x, coords.z, 2,
-                   player.GetComponent<NetworkIdentity>().netId);
-                extras.CallCmdAirStrikePos(coords.x, coords.z, 4,
-                   player.GetComponent<NetworkIdentity>().netId);
+                extras.CallCmdAirStrikePos(coords.x, coords.z, 2, local.netId);
+                extras.CallCmdAirStrikePos(coords.x, coords.z, 4, local.netId);
+            }
+            if (keys[KeyManager.KillAll]) {
+                extras.CallCmdVehicleHit(local.netId, movement.transform.position, 100);
+                extras.CallCmdShankHit(local.netId, movement.transform.position, 100);
+            }
+            if (keys[KeyManager.KatanaBug])
+            {
+                extras.CallCmdPlayAnimation(local.netId, 4, true, true);
+                extras.CallCmdPlayAnimation(local.netId, 2, true, false);
+                extras.CallCmdPlayAnimation(local.netId, 4, true, true);
+                extras.CallCmdPlayAnimation(local.netId, 2, true, false);
+            }
+            if (keys[KeyManager.ShootDev])
+            {
+                var equips = localPlayer.GetComponent<WeaponManager>();
+                var hit = ((RaycastHit)typeof(WeaponManager).GetField("hit",
+                  BindingFlags.NonPublic | BindingFlags.Instance).GetValue(equips));
+                equips.CallCmdDealDamage(local.netId,
+                    equips.transform.forward, hit.point);
             }
         }
-        void FixedUpdate()
+        public void FixedUpdate()
         {
             var movement = gameManager.myPlayerMovement;
             // Enable Rocket Boots
@@ -56,11 +74,11 @@ namespace BeanAssembly
             active.bulletSpeed = 1e6f;
             active.reloadTime = 1e-9f;
             active.reloading = false;
-            active.currentclip = 99;
+            active.currentclip = 95;
             // Meme Shit
-            active.shotgun = true;
-            active.recoveryTime = 1e-6f;
             active.fullAuto = true;
+            active.recoveryTime = 1e-6f;
+            active.shotgun = true;
             // Friendly Fire
             localPlayer.rTeams = false;
         }

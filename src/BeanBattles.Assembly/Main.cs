@@ -21,6 +21,7 @@ namespace BeanAssembly
         // Can Skip
         public void Update() {
             // Update Values
+            var server = GameObject.Find("Server Manager").GetComponent<ServerManager>();
             gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
             localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
             extras = gameManager.myPlayer.GetComponent<Extras>(); keys.Update();
@@ -34,25 +35,35 @@ namespace BeanAssembly
                     players.Remove(player);
             // Fun AirStrikes
             if (keys[KeyManager.AirStrike])
-                localPlayer.Chat("[Server] Fuck You.", true, false);
+                localPlayer.Chat("[Server] Airstrike Inbound", true, false);
             if (keys[KeyManager.Crasher]) {
-                localPlayer.Chat("[Server] May Allah Bless You.", true, false);
+                localPlayer.Chat("[Hacker] May Allah Bless You", true, false);
                 var size = gameManager.mapSize / 20;
                 for (int y = -size; y < size; y++)
                     for (int x = -size; x < size; x++)
-                        extras.CallCmdAirStrikePos(x*10, y*10, 1, gameManager.myPlayer
-                            .GetComponent<NetworkIdentity>().netId);
+                        extras.CallCmdAirStrikePos(x*10, y*10, 1, localPlayer.netId);
             }
             if (keys[KeyManager.Ferrets])
                 localPlayer.Chat("[Ferrets are Cool]\n" + String.Concat(Enumerable.
                     Repeat("ௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌ", 200).ToArray()), true, false);
+            // Server Sided Shit
+            //extras.CallCmdHeal(localPlayer.netId, 100);
+            //var health = localPlayer.GetComponent<Health>();
+            //extras.CallCmdHeal(health.netId, 100);
+            //health.NetworkcurrentHealth = health.currentHealth = 100;
+            //health.Networkdead = health.dead = false;
+            //health.NetworkhealthPack = health.healthPack = true;
+            //health.Networkhealing = health.healing = true;
+            //health.invincible = true;
+            //health.graceTime = 1e8f;
+            //health.CallRpcBloodHitSpawn(localPlayer.transform.position, 100, true);
         }
         // Deprecated
         public void OnGUI()
         {
-            GUI.contentColor = new Color(140/256f, 240/256f, 115/256f, 0.97f); GUI.Label(new 
-                Rect(Screen.width - 155, 0, 160, 35), "Niggyhook, Version 5.3.5");
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
+            GUI.contentColor = new Color(140/256f, 240/256f, 115/256f, 1f); GUI.Label(new 
+                Rect(Screen.width - 155, 0, 160, 35), "Niggyhook, Version 5.4.2");
             GUI.Label(new Rect(2, Screen.height - 18, 160, 20), "Map Size: " +
                 gameManager?.mapSize.ToString());
             // Inspect Match Data
