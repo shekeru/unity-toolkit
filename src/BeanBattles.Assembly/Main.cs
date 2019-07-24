@@ -8,38 +8,24 @@ using System;
 
 namespace BeanAssembly
 {
-    enum Keys
-    {
-        AirStrike = KeyCode.Keypad9,
-        ForceAuto = KeyCode.Keypad6,
-        Speedup = KeyCode.Keypad5,
-        Shotgun = KeyCode.Keypad4,
-        ForceBoots = KeyCode.Keypad2,
-    };
     partial class NiggyHook : MonoBehaviour
     {
         // Hack State
-        List<GameObject> players = new List<GameObject>();
-        Dictionary<Keys, bool> keys = new Dictionary<Keys, bool>();
+        List<GameObject> players; KeyManager keys;
         // Unity Classes
         CustomNetworkManager netManager; GameManager gameManager;
         SetUpLocalPlayer localPlayer; Extras extras;
+        // Init
         public void Start() {
-            keys[Keys.AirStrike] = false;
-            keys[Keys.Shotgun] = false;
-            keys[Keys.Speedup] = false;
-            keys[Keys.ForceAuto] = false;
+            players = new List<GameObject>();
+            keys = new KeyManager();
         }
+        // Can Skip
         public void Update() {
             // Update Values
             gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
             localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
-            extras = gameManager.myPlayer.GetComponent<Extras>();
-            // Keybind Checks
-            try {
-                foreach (var kcode in keys.Keys)
-                    keys[kcode] = Input.GetKeyDown((KeyCode)kcode);
-            } catch {} 
+            extras = gameManager.myPlayer.GetComponent<Extras>(); keys.Update();
             // Update Players
             foreach (var player in gameManager.players) {
                 try { UpdatePlayer(player); } catch {};
@@ -48,16 +34,26 @@ namespace BeanAssembly
             foreach (var player in players)
                 if (!gameManager.players.Contains(player))
                     players.Remove(player);
-            // Fun AirStrike
-            if(keys[Keys.AirStrike])
+            // Fun AirStrikes
+            if (keys[KeyManager.AirStrike])
                 localPlayer.Chat("[Server] Fuck You.", true, false);
+            if (keys[KeyManager.Crasher]) {
+                localPlayer.Chat("[Server] May Allah Bless You.", true, false);
+                var size = gameManager.mapSize / 20;
+                for (int y = -size; y < size; y++)
+                    for (int x = -size; x < size; x++)
+                        extras.CallCmdAirStrikePos(x*10, y*10, 1, gameManager.myPlayer
+                            .GetComponent<NetworkIdentity>().netId);
+            }
         }
+        // Deprecated
         public void OnGUI()
         {
-            GUI.contentColor = new Color(0, 116, 217, 1);
-            GUI.Label(new Rect(10, 4, 200, 40), "Niggyhook, Version 5.1");
+            GUI.contentColor = new Color(140f/256, 240f/256, 115f/256, 0.95f); GUI.Label(new 
+                Rect(Screen.width - 155, 0, 160, 35), "Niggyhook, Version 5.3.4");
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
-            GUI.Label(new Rect(10, 600, 200, 40), netManager.steamInfo.steamDisplayName.text);
+            GUI.Label(new Rect(2, Screen.height - 18, 160, 20), "Map Size: " +
+                gameManager?.mapSize.ToString());
             // Inspect Match Data
             //var menus = netManager.menuMatchPanel.GetComponentsInChildren<MenuMatch>();
             //GUI.Label(new Rect(10, 76, 400, 25), "Matches: " + menus.Length.ToString());

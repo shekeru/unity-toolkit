@@ -24,11 +24,12 @@ namespace BeanAssembly
                     local.playerColor); players.Add(player);
             }
             // And fuck to you too
-            if (keys[Keys.AirStrike])
+            if (keys[KeyManager.AirStrike])
             {
-                extras.airstrikeDelay = false;
                 var coords = movement.transform.position;
                 extras.CallCmdAirStrikePos(coords.x, coords.z, 2,
+                   player.GetComponent<NetworkIdentity>().netId);
+                extras.CallCmdAirStrikePos(coords.x, coords.z, 4,
                    player.GetComponent<NetworkIdentity>().netId);
             }
         }
