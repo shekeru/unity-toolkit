@@ -51,19 +51,17 @@ namespace BeanAssembly
         }
         public void OnGUI()
         {
-            GUI.contentColor = Color.cyan;
-            GUI.Label(new Rect(10, 5, 200, 40), "Niggyhook, Version 4");
-            GUI.contentColor = Color.white; // Game Managers
+            GUI.contentColor = new Color(0, 116, 217, 1);
+            GUI.Label(new Rect(10, 5, 200, 40), "Niggyhook, Version 5");
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
-            GUI.Label(new Rect(10, 600, 200, 40),
-                netManager.steamInfo.steamDisplayName.text);
+            GUI.Label(new Rect(10, 600, 200, 40), netManager.steamInfo.steamDisplayName.text);
             // Inspect Match Data
-                var match = ((MatchUp.Match) typeof(CustomNetworkManager)
-                    .GetField("tryingToJoinMatch", BindingFlags.NonPublic | BindingFlags.Instance)
-                    .GetValue(netManager)).matchData;
-                netManager.passwordEntryInput.text = match["Match Password"];
-                netManager.passwordEntryTitle.text = match["externalIP"] 
-                    + ":" + match["port"];
+            var match = ((MatchUp.Match) typeof(CustomNetworkManager).GetField("tryingToJoinMatch", 
+                BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager)).matchData;
+            // ByPass Password Shit
+            netManager.passwordEntryInput.text = match["Match Password"];
+            netManager.passwordEntryTitle.text = 
+                match["externalIP"] + ":" + match["port"];
         }
         // Privates
         void BurstFire(Weapon active)
