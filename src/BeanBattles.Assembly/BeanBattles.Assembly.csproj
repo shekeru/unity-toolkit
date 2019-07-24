@@ -231,7 +231,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control.cs" />
+    <Compile Include="Features.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
