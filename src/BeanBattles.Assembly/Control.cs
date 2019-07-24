@@ -5,16 +5,22 @@ using System.Linq;
 
 namespace BeanAssembly
 {
+    enum Keys
+    {
+        AirStrike = KeyCode.Keypad9,
+        Testing = KeyCode.Keypad5,
+    };
     public class NiggyHook : MonoBehaviour
     {
         // Hack State
         List<GameObject> players = new List<GameObject>();
-        Dictionary<KeyCode, bool> keys = new Dictionary<KeyCode, bool>();
+        Dictionary<Keys, bool> keys = new Dictionary<Keys, bool>();
         // Unity Classes
         GameManager gameManager; CustomNetworkManager netManager;
         SetUpLocalPlayer localPlayer; Extras extras;
         public void Start() {
-            keys[KeyCode.Keypad9] = false;
+            keys[Keys.AirStrike] = false;
+            keys[Keys.Testing] = true;
         }
         public void Update() {
             // Update Values
@@ -24,7 +30,8 @@ namespace BeanAssembly
             // Keybind Checks
             try {
                 foreach (var kcode in keys.Keys)
-                    keys[kcode] = Input.GetKeyDown(kcode);
+                    if (Input.GetKeyDown((KeyCode) kcode))
+                        keys[kcode] ^= true;
             } catch {} 
             // Update Players
             foreach (var player in gameManager.players) {
@@ -38,7 +45,7 @@ namespace BeanAssembly
         public void OnGUI()
         {
             GUI.contentColor = Color.cyan;
-            GUI.Label(new Rect(10, 10, 200, 40), "Niggyhook, Version 4");
+            GUI.Label(new Rect(10, 5, 200, 40), "Niggyhook, Version 4");
             GUI.contentColor = Color.white; // Game Managers
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
             GUI.Label(new Rect(10, 600, 200, 40),
@@ -59,7 +66,7 @@ namespace BeanAssembly
                   local.playerColor); players.Add(player);
             }
             // And fuck to you too
-            if (keys[KeyCode.Keypad9])
+            if (keys[Keys.AirStrike])
             {
                 extras.airstrikeDelay = false;
                 var coords = movement.transform.position;
@@ -75,6 +82,11 @@ namespace BeanAssembly
             movement.movementSpeed = 14f;
             movement.sprintSpeed = 24f;
             movement.jumpSpeed = 90f;
+            // Visual Queues
+            if (keys[Keys.Testing]) {
+                movement.anim.SetBool("isSprinting", false);
+                movement.anim.SetBool("isWalking", false);
+            }
         }
         private void UpdateLocal() {
             // Change Weapon Manager Values
@@ -87,18 +99,14 @@ namespace BeanAssembly
             // Better Shot Handling
             active.bulletSpeed = 1e6f;
             active.reloadTime = 1e-9f;
-            active.currentclip = 500;
             active.reloading = false;
+            active.currentclip = 99;
             // Meme Shit
             active.shotgun = true;
             active.recoveryTime = 1e-6f;
-            //active.recovering = false;
             active.fullAuto = true;
             // Friendly Fire
             localPlayer.rTeams = false;
-            //localPlayer.teammates = new List<GameObject>(gameManager.players);
-            //localPlayer.teammateNumber = gameManager.players.Length - 1;
-            //localPlayer.NetworkteamNumber = localPlayer.teamNumber = -1;
         }
         // Privates
         private void BurstFire(Weapon active)
