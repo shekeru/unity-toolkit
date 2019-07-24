@@ -48,20 +48,40 @@ namespace BeanAssembly
             foreach (var player in players)
                 if (!gameManager.players.Contains(player))
                     players.Remove(player);
+            // Fun AirStrike
+            if(keys[Keys.AirStrike])
+                localPlayer.Chat("[Server] Fuck You.", true, false);
         }
         public void OnGUI()
         {
             GUI.contentColor = new Color(0, 116, 217, 1);
-            GUI.Label(new Rect(10, 5, 200, 40), "Niggyhook, Version 5");
+            GUI.Label(new Rect(10, 4, 200, 40), "Niggyhook, Version 5.1");
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
             GUI.Label(new Rect(10, 600, 200, 40), netManager.steamInfo.steamDisplayName.text);
             // Inspect Match Data
-            var match = ((MatchUp.Match) typeof(CustomNetworkManager).GetField("tryingToJoinMatch", 
-                BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager)).matchData;
-            // ByPass Password Shit
+            //var menus = netManager.menuMatchPanel.GetComponentsInChildren<MenuMatch>();
+            //GUI.Label(new Rect(10, 76, 400, 25), "Matches: " + menus.Length.ToString());
+            //foreach (var menu in menus) {
+            //    menu.fullText.gameObject.SetActive(false);
+            //    menu.buttonObj.gameObject.SetActive(true);
+            //}
+            // Edit MatchDatas
+            var matches = (MatchUp.Match[]) typeof(CustomNetworkManager).GetField("matches",
+                BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager);
+            //foreach (var listing in matches) {
+            //    listing.matchData["maxPlayers"] = 20;
+            //    listing.matchData["matchIsFull"] = 0;
+            //}
+            // Bypass cocksucker passwords
+            var match = ((MatchUp.Match)typeof(CustomNetworkManager).GetField("tryingToJoinMatch",
+               BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager)).matchData;
             netManager.passwordEntryInput.text = match["Match Password"];
-            netManager.passwordEntryTitle.text = 
+            netManager.passwordEntryTitle.text =
                 match["externalIP"] + ":" + match["port"];
+            // Debug Print
+            //int position = 110;
+            //foreach (var key in match) GUI.Label(new
+            //    Rect(10, position += 22, 400, 25), key.ToString());
         }
         // Privates
         void BurstFire(Weapon active)
