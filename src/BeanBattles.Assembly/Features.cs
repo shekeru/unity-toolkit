@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace BeanAssembly
 {
-    partial class NiggyHook
+    partial class BeanAbuser
     {
         void UpdatePlayer(GameObject player)
         {

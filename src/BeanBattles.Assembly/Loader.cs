@@ -9,7 +9,7 @@ namespace BeanAssembly
         public static void Load()
         {
             gameObject = new UnityEngine.GameObject();
-            gameObject.AddComponent<NiggyHook>();
+            gameObject.AddComponent<BeanAbuser>();
             UnityEngine.Object.DontDestroyOnLoad(gameObject);
         }
         public static void Unload()

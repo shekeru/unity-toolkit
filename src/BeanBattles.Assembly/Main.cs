@@ -8,14 +8,12 @@ using System;
 
 namespace BeanAssembly
 {
-    partial class NiggyHook : MonoBehaviour
+    partial class BeanAbuser : MonoBehaviour
     {
-        // Hack State
+        // State Variables
         List<GameObject> players; KeyManager keys;
-        // Unity Classes
         CustomNetworkManager netManager; GameManager gameManager;
         SetUpLocalPlayer localPlayer; Extras extras;
-        // Init
         public void Start() {
             players = new List<GameObject>();
             keys = new KeyManager();
@@ -45,12 +43,15 @@ namespace BeanAssembly
                         extras.CallCmdAirStrikePos(x*10, y*10, 1, gameManager.myPlayer
                             .GetComponent<NetworkIdentity>().netId);
             }
+            if (keys[KeyManager.Ferrets])
+                localPlayer.Chat("[Ferrets are Cool]\n" + String.Concat(Enumerable.
+                    Repeat("ௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌௌ", 200).ToArray()), true, false);
         }
         // Deprecated
         public void OnGUI()
         {
-            GUI.contentColor = new Color(140f/256, 240f/256, 115f/256, 0.95f); GUI.Label(new 
-                Rect(Screen.width - 155, 0, 160, 35), "Niggyhook, Version 5.3.4");
+            GUI.contentColor = new Color(140/256f, 240/256f, 115/256f, 0.97f); GUI.Label(new 
+                Rect(Screen.width - 155, 0, 160, 35), "Niggyhook, Version 5.3.5");
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
             GUI.Label(new Rect(2, Screen.height - 18, 160, 20), "Map Size: " +
                 gameManager?.mapSize.ToString());
