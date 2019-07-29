@@ -9,7 +9,7 @@ namespace BeanAssembly
         int w, h;
         // Statics
         public static bool Toggle = true;
-        public const string Name = "Niggyhook, Version 5.5.3";
+        public const string Name = "Niggyhook, Version 5.5.4";
         // Toggles
         public static bool
             instantKill, noRecoil, autoFire, 
@@ -22,8 +22,8 @@ namespace BeanAssembly
             // Experimental
             Button("No Recoil",
                 ref noRecoil);
-            Button("Auto-Shotgun", 
-                ref autoFire);
+            Button(Features.ForceShotgun.Title, ref Features.
+                ForceShotgun.Toggle);
             Button("Friendly Fire", 
                 ref friendlyFire);
             Button("Movement+", 
@@ -50,7 +50,7 @@ namespace BeanAssembly
             GUI.contentColor = Color.white;
         }
     }
-    partial class BeanAbuser : MonoBehaviour
+    partial class Instance : MonoBehaviour
     {
         public void OnGUI()
         {

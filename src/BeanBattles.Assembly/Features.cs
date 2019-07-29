@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 
 namespace BeanAssembly
 {
-    partial class BeanAbuser
+    partial class Instance
     {
         void UpdatePlayer(GameObject player)
         {
@@ -89,13 +89,40 @@ namespace BeanAssembly
             active.currentclip = 95;
             // Meme Shit
             if (Interface.autoFire) {
-                active.fullAuto = true;
-                active.recoveryTime = 1e-6f;
-                active.shotgun = true;
+                //active.fullAuto = true;
+                //active.recoveryTime = 1e-6f;
+                //active.shotgun = true;
             }
             // Friendly Fire
             localPlayer.rTeams = 
                 Interface.friendlyFire;
+            foreach (var feature in features)
+                try { feature.UpdateLocal(); } catch {}
+        }
+    }
+    abstract class Feature
+    {
+        // Update Other Players
+        public virtual void UpdateLocal() {}
+        // Update Local Player
+        public virtual void UpdatePlayer() {}
+        // Store Defaults
+        public void StoreDefaults<T>(T src, ref T dest)
+        {
+            if (dest.Equals(src))
+                return; dest = src;
+            var fields = GetType().GetFields(BindingFlags.Static);
+            foreach (var field in fields)
+                field.SetValue(this, typeof(T).GetField(field.Name,
+            BindingFlags.Static | BindingFlags.NonPublic).GetValue(src));
+        }
+        // Load Defaults
+        public void LoadDefaults<T>(T obj)
+        {
+            var fields = GetType().GetFields(BindingFlags.Static);
+            foreach (var field in fields)
+                typeof(T).GetField(field.Name, BindingFlags.Static | BindingFlags
+                    .NonPublic).SetValue(obj, field.GetValue(this));
         }
     }
 }
