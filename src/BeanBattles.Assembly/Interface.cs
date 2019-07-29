@@ -10,7 +10,7 @@ namespace BeanAssembly
         int w, h;
         // Statics
         public static bool Toggle = true;
-        public const string Name = "Niggyhook, Version 5.6.7";
+        public const string Name = "Niggyhook, Version 5.6.8";
         // Toggles
         public static bool
             instantKill, friendlyFire;

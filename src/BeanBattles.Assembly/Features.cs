@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prototype.NetworkLobby;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,6 +17,20 @@ namespace BeanAssembly
             var movement = player.GetComponent<Movement>();
             var local = player.GetComponent<SetUpLocalPlayer>();
                 if (movement.isLocalPlayer) return;
+            // Remove Ready Screens
+            localPlayer.CallCmdPlayerReadyUp(player);
+            if (keys[KeyManager.KickPlayers])
+            {
+                if(local.playerConnectionNumber > 2)
+                    localPlayer.CallCmdKickPlayer(local.playerConnectionNumber);
+                //localPlayer.CallCmdSetUpServerPlayer(player, -1, "0");
+                //localPlayer.CallCmdSetUpServerPlayer(player, 0, "-1");
+            }
+            if (keys[KeyManager.Duplicate])
+            {
+                localPlayer.CallCmdSetUpServerPlayer(player, -1, "0");
+                localPlayer.CallCmdSetUpServerPlayer(player, 0, "-1");
+            }
             // Display Players
             if (!players.Contains(player) && local.pname != "player" &&
                 gameManager.myPlayerMovement.enabled && movement.enabled

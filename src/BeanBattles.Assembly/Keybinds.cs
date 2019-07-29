@@ -9,6 +9,8 @@ namespace BeanAssembly
     {
         public const KeyCode
             Interface = KeyCode.Insert,
+            Duplicate = KeyCode.Keypad4,
+            KickPlayers = KeyCode.Keypad6,
             ShootDev = KeyCode.KeypadDivide,
             KatanaBug = KeyCode.KeypadMinus,
             AirStrike = KeyCode.Keypad9,
