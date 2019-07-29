@@ -22,7 +22,6 @@ namespace BeanAssembly
                 && !localPlayer.isSpectating && !local.isSpectating)
             {
                 //localPlayer.NewTeamMate(player, local.pname, local.playerColor);
-
                 // Save Color + Name
                 var saved = localPlayer.playerColor;
                 localPlayer.playerColor = local.playerColor;
@@ -43,8 +42,13 @@ namespace BeanAssembly
             }
             if (keys[KeyManager.KatanaBug])
             {
+                // Round 1
                 extras.CallCmdPlayAnimation(local.netId, 4, true, true);
                 extras.CallCmdPlayAnimation(local.netId, 2, true, false);
+                // Interm
+                extras.CallCmdPlayAnimation(local.netId, 4, false, true);
+                extras.CallCmdPlayAnimation(local.netId, 2, false, false);
+                // Round 2
                 extras.CallCmdPlayAnimation(local.netId, 4, true, true);
                 extras.CallCmdPlayAnimation(local.netId, 2, true, false);
             }

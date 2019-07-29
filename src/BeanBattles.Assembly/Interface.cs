@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Reflection;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace BeanAssembly
 {
@@ -9,7 +10,7 @@ namespace BeanAssembly
         int w, h;
         // Statics
         public static bool Toggle = true;
-        public const string Name = "Niggyhook, Version 5.6.5";
+        public const string Name = "Niggyhook, Version 5.6.7";
         // Toggles
         public static bool
             instantKill, friendlyFire;
@@ -70,21 +71,23 @@ namespace BeanAssembly
         public void OnGUI()
         {
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
-            netManager.steamFriendManager.mySteamID = new Steamworks.CSteamID(76561198193871823);
-            netManager.playerName = "";
+            var steamInfo = netManager.steamFriendManager.sPInfo;
+            var sFriends = netManager.steamFriendManager;
+            // Override Steam States
+            steamInfo.SetSteamStat("player_warning", 0, false);
+            steamInfo.SetSteamStat("player_boxes_golden", 25, false);
+            steamInfo.SetSteamStat("player_boxes", 50, false);
+            // friendManager Fuckery
+            sFriends.mySteamID = new Steamworks.CSteamID(76561198193871823);
+            typeof(SteamPlayerInfo).GetField("mySteamID", BindingFlags.Instance |
+                BindingFlags.NonPublic).SetValue(steamInfo, sFriends.mySteamID);
+            netManager.playerName = steamInfo.steamDisplayName.text = "cats";
             // Basic Interface
             Interface.Label(Screen.width - 155, 0, 160, 35, Interface.Name);
             if (Interface.Toggle)
                 new Interface(Interface.Name);
-            // Edit MatchDatas
-            var matches = (MatchUp.Match[])typeof(CustomNetworkManager).GetField("matches",
-                BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager);
-            //foreach (var listing in matches) {
-            //    listing.matchData["maxPlayers"] = 20;
-            //    listing.matchData["matchIsFull"] = 0;
-            //}
             // Bypass cocksucker passwords
-            var match = ((MatchUp.Match)typeof(CustomNetworkManager).GetField("tryingToJoinMatch",
+            var match = ((MatchUp.Match) typeof(CustomNetworkManager).GetField("tryingToJoinMatch",
                BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager)).matchData;
             netManager.passwordEntryInput.text = match["Match Password"];
             netManager.passwordEntryTitle.text =
