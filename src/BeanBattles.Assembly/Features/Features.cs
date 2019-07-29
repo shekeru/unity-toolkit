@@ -14,15 +14,15 @@ namespace BeanAssembly
         void UpdatePlayer(GameObject player)
         {
             var movement = player.GetComponent<Movement>();
-            if (movement.isLocalPlayer) return;
             var local = player.GetComponent<SetUpLocalPlayer>();
+                if (movement.isLocalPlayer) return;
             // Display Players
             if (!players.Contains(player) && local.pname != "player" &&
                 gameManager.myPlayerMovement.enabled && movement.enabled
                 && !localPlayer.isSpectating && !local.isSpectating)
             {
                 localPlayer.NewTeamMate(player, local.pname,
-                    local.playerColor); players.Add(player);
+                    local.playerColor);  players.Add(player);
             }
             // And fuck to you too
             if (keys[KeyManager.AirStrike])
@@ -50,16 +50,26 @@ namespace BeanAssembly
                 equips.CallCmdDealDamage(local.netId,
                     equips.transform.forward, hit.point);
             }
+            if(Interface.instantKill) {
+                var equips = localPlayer.GetComponent<WeaponManager>();
+                var hit = ((RaycastHit)typeof(WeaponManager).GetField("hit",
+                  BindingFlags.NonPublic | BindingFlags.Instance).GetValue(equips));
+                var target = hit.transform.GetComponent<SetUpLocalPlayer>();
+                if (target.netId == local.netId) for(var i = 0; i < 10; i++)
+                    equips.CallCmdDealDamage(local.netId, equips.transform.forward, hit.point);
+            }
         }
         public void FixedUpdate()
         {
             var movement = gameManager.myPlayerMovement;
             // Enable Rocket Boots
-            movement.rocketJumpEnabled = true;
-            movement.boostPower = 100f;
-            movement.movementSpeed = 14f;
-            movement.sprintSpeed = 24f;
-            movement.jumpSpeed = 90f;
+            if (Interface.rocketBoots) {
+                movement.rocketJumpEnabled = true;
+                movement.boostPower = 100f;
+                movement.movementSpeed = 14f;
+                movement.sprintSpeed = 24f;
+                movement.jumpSpeed = 90f;
+            }
         }
         void UpdateLocal()
         {
@@ -67,20 +77,25 @@ namespace BeanAssembly
             var equips = localPlayer.GetComponent<WeaponManager>();
             var active = equips.weapons[equips.currentWeapon];
             // Zero Recoil Values
-            active.additionalSideKick = 0f;
-            active.verticalKick = 0f;
-            active.sideKick = 0f;
+            if (Interface.noRecoil || true) {
+                active.additionalSideKick = 0f;
+                active.verticalKick = 0f;
+                active.sideKick = 0f;
+            }
             // Better Shot Handling
             active.bulletSpeed = 1e6f;
             active.reloadTime = 1e-9f;
             active.reloading = false;
             active.currentclip = 95;
             // Meme Shit
-            active.fullAuto = true;
-            active.recoveryTime = 1e-6f;
-            active.shotgun = true;
+            if (Interface.autoFire) {
+                active.fullAuto = true;
+                active.recoveryTime = 1e-6f;
+                active.shotgun = true;
+            }
             // Friendly Fire
-            localPlayer.rTeams = false;
+            localPlayer.rTeams = 
+                Interface.friendlyFire;
         }
     }
 }

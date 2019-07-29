@@ -11,6 +11,7 @@ namespace BeanAssembly
     class KeyManager : Dictionary<KeyCode, bool>
     {
         public const KeyCode
+            Interface = KeyCode.Insert,
             ShootDev = KeyCode.KeypadDivide,
             KatanaBug = KeyCode.KeypadMinus,
             AirStrike = KeyCode.Keypad9,
@@ -20,12 +21,9 @@ namespace BeanAssembly
         // Logic
         public KeyManager()
         {
-            GetType().GetFields(BindingFlags.Static | BindingFlags.Public);
-            this[KatanaBug] = false;
-            this[AirStrike] = false;
-            this[KillAll] = false;
-            this[Crasher] = false;
-            this[Ferrets] = false;
+            foreach (var code in GetType().GetFields
+                (BindingFlags.Static | BindingFlags.Public))
+            this[(KeyCode)code.GetValue(this)] = false;
         }
         public void Update()
         {

@@ -232,7 +232,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features.cs" />
+    <Compile Include="Features\Features.cs" />
+    <Compile Include="Features\ForceShotgun.cs" />
+    <Compile Include="Interface.cs" />
     <Compile Include="Keybinds.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Loader.cs" />
