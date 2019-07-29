@@ -73,6 +73,7 @@ namespace BeanAssembly
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
             var steamInfo = netManager.steamFriendManager.sPInfo;
             var sFriends = netManager.steamFriendManager;
+            netManager.roundsMatch = 99;
             // Override Steam States
             steamInfo.SetSteamStat("player_warning", 0, false);
             steamInfo.SetSteamStat("player_boxes_golden", 25, false);
@@ -81,7 +82,7 @@ namespace BeanAssembly
             sFriends.mySteamID = new Steamworks.CSteamID(76561198193871823);
             typeof(SteamPlayerInfo).GetField("mySteamID", BindingFlags.Instance |
                 BindingFlags.NonPublic).SetValue(steamInfo, sFriends.mySteamID);
-            netManager.playerName = steamInfo.steamDisplayName.text = "unity games + tranny code";
+            netManager.playerName = steamInfo.steamDisplayName.text = "";
             // Basic Interface
             Interface.Label(Screen.width - 155, 0, 160, 35, Interface.Name);
             if (Interface.Toggle)
