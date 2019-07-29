@@ -9,11 +9,11 @@ namespace BeanAssembly
         int w, h;
         // Statics
         public static bool Toggle = true;
-        public const string Name = "Niggyhook, Version 5.6.4";
+        public const string Name = "Niggyhook, Version 5.6.5";
         // Toggles
         public static bool
             instantKill, friendlyFire;
-        public static string last_error = "ok.none";
+        public static string last_error = "";
         // Create
         public Interface(string text)
         {
@@ -42,7 +42,7 @@ namespace BeanAssembly
             GUI.contentColor = new Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
             GUI.Label(AfterLabel(), "-Commands");
                 Button("Close Menu", ref Toggle);
-            //Label(5, 3, 600, 400, last_error);
+        //    Label(0, 0, 400, 20, last_error);
         }
         public Rect AfterButton()
         {
@@ -70,6 +70,8 @@ namespace BeanAssembly
         public void OnGUI()
         {
             netManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
+            netManager.steamFriendManager.mySteamID = new Steamworks.CSteamID(76561198193871823);
+            netManager.playerName = "";
             // Basic Interface
             Interface.Label(Screen.width - 155, 0, 160, 35, Interface.Name);
             if (Interface.Toggle)

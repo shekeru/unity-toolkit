@@ -69,6 +69,9 @@ namespace BeanAssembly
             localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
             extras = gameManager.myPlayer.GetComponent<Extras>(); keys.Update();
             equips = localPlayer.GetComponent<WeaponManager>(); 
+            // Change Names
+            localPlayer.pname = localPlayer.playerNameText.text
+                = netManager.playerName = "";
             // Begin Updates
             foreach (var player in gameManager.players) {
                 try { UpdatePlayer(player); } catch { };

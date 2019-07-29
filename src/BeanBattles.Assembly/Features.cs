@@ -21,8 +21,14 @@ namespace BeanAssembly
                 gameManager.myPlayerMovement.enabled && movement.enabled
                 && !localPlayer.isSpectating && !local.isSpectating)
             {
-                localPlayer.NewTeamMate(player, local.pname,
-                    local.playerColor);  players.Add(player);
+                //localPlayer.NewTeamMate(player, local.pname, local.playerColor);
+
+                // Save Color + Name
+                var saved = localPlayer.playerColor;
+                localPlayer.playerColor = local.playerColor;
+                localPlayer.SetSinglePointerUI(player);
+                localPlayer.playerColor = saved;
+                players.Add(player);
             }
             // And fuck to you too
             if (keys[KeyManager.AirStrike])
