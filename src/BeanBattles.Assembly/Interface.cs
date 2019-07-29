@@ -78,11 +78,15 @@ namespace BeanAssembly
             steamInfo.SetSteamStat("player_warning", 0, false);
             steamInfo.SetSteamStat("player_boxes_golden", 25, false);
             steamInfo.SetSteamStat("player_boxes", 50, false);
-            // friendManager Fuckery
+            // Disable Interface Lock
+            sFriends.IdNotificationObj.gameObject.SetActive(false);
+            typeof(SteamFriendManager).GetField("currentWarningStatus", BindingFlags.Instance |
+                BindingFlags.NonPublic).SetValue(sFriends, 0);
+            // Change Steam Details
             sFriends.mySteamID = new Steamworks.CSteamID(76561198193871823);
             typeof(SteamPlayerInfo).GetField("mySteamID", BindingFlags.Instance |
                 BindingFlags.NonPublic).SetValue(steamInfo, sFriends.mySteamID);
-            netManager.playerName = steamInfo.steamDisplayName.text = "";
+            netManager.playerName = steamInfo.steamDisplayName.text = "unity games";
             // Basic Interface
             Interface.Label(Screen.width - 155, 0, 160, 35, Interface.Name);
             if (Interface.Toggle)
