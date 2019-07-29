@@ -81,7 +81,7 @@ namespace BeanAssembly
             sFriends.mySteamID = new Steamworks.CSteamID(76561198193871823);
             typeof(SteamPlayerInfo).GetField("mySteamID", BindingFlags.Instance |
                 BindingFlags.NonPublic).SetValue(steamInfo, sFriends.mySteamID);
-            netManager.playerName = steamInfo.steamDisplayName.text = "cats";
+            netManager.playerName = steamInfo.steamDisplayName.text = "unity games + tranny code";
             // Basic Interface
             Interface.Label(Screen.width - 155, 0, 160, 35, Interface.Name);
             if (Interface.Toggle)
