@@ -32,13 +32,12 @@ namespace BeanAssembly
         public static List<Feature> features;
         public static List<GameObject> players;
         // Managers
-        public static WeaponManager equips;
         public static GameManager gameManager;
         public static CustomNetworkManager netManager;
         public static ServerManager serverManager;
         // Game Player
+        public static WeaponManager equips;
         public static SetUpLocalPlayer localPlayer;
-        public static Movement myMovement;
         public static Extras extras;
         // Init Everything
         public void Start()
@@ -50,8 +49,16 @@ namespace BeanAssembly
             // Add Features
             features.Add(new
                 Features.NoRecoil());
-            features.Add(new 
-                Features.ForceShotgun());
+            features.Add(new
+                Features.ShotgunMode());
+            features.Add(new
+                Features.FastReload());
+            features.Add(new
+                Features.AutoFire());
+            features.Add(new
+                Features.NoReload());
+            features.Add(new
+                Features.RocketBoost());
         }
         // Disregard Frame Skips for now
         public void Update()
@@ -61,12 +68,12 @@ namespace BeanAssembly
             gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
             localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
             extras = gameManager.myPlayer.GetComponent<Extras>(); keys.Update();
-            equips = localPlayer.GetComponent<WeaponManager>(); Interface.Toggle 
-                ^= keys[KeyManager.Interface];
+            equips = localPlayer.GetComponent<WeaponManager>(); 
             // Begin Updates
             foreach (var player in gameManager.players) {
                 try { UpdatePlayer(player); } catch { };
-            }; UpdateLocal();
+            };
+            Interface.Toggle ^= keys[KeyManager.Interface]; UpdateLocal();
             // Reset Entries
             foreach (var player in players)
                 if (!gameManager.players.Contains(player))

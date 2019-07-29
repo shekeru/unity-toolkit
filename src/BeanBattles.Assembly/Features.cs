@@ -59,36 +59,16 @@ namespace BeanAssembly
                     equips.CallCmdDealDamage(local.netId, equips.transform.forward, hit.point);
             }
         }
-        public void FixedUpdate()
-        {
-            var movement = gameManager.myPlayerMovement;
-            // Enable Rocket Boots
-            if (Interface.rocketBoots) {
-                movement.rocketJumpEnabled = true;
-                movement.boostPower = 100f;
-                movement.movementSpeed = 14f;
-                movement.sprintSpeed = 24f;
-                movement.jumpSpeed = 90f;
-            }
-        }
         void UpdateLocal()
         {
-            // Change Weapon Manager Values
-            var active = equips.weapons[equips.currentWeapon];
-            // Better Shot Handling
-            active.bulletSpeed = 1e6f;
-            active.reloadTime = 1e-9f;
-            active.reloading = false;
-            active.currentclip = 95;
-            // Friendly Fire
-            localPlayer.rTeams = 
-                Interface.friendlyFire;
             foreach (var feature in features)
                 try { feature.UpdateLocal(); } catch 
                 (Exception e) {
                     Interface.last_error = 
                         e.Message + '\n' + e.StackTrace;
-                }
+                } // Misc Features
+            localPlayer.rTeams =
+                Interface.friendlyFire;
         }
     }
     abstract class Feature

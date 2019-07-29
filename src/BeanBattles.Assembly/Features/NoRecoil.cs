@@ -11,7 +11,8 @@ namespace BeanAssembly.Features
     {
         Weapon weapon;
         // Config
-        public override string NAME => "No Recoil";
+        public override string 
+            NAME => "No Recoil";
         // Defaults
         static float verticalKick;
         static float additionalSideKick;

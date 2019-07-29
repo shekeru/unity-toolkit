@@ -9,11 +9,10 @@ namespace BeanAssembly
         int w, h;
         // Statics
         public static bool Toggle = true;
-        public const string Name = "Niggyhook, Version 5.6.2";
+        public const string Name = "Niggyhook, Version 5.6.3";
         // Toggles
         public static bool
-            instantKill, noRecoil, autoFire, 
-            rocketBoots, friendlyFire;
+            instantKill, friendlyFire;
         public static string last_error = "ok.none";
         // Create
         public Interface(string text)
@@ -36,16 +35,13 @@ namespace BeanAssembly
             GUI.Label(AfterLabel(), "-Experimental");
             Button("Friendly Fire", 
                 ref friendlyFire);
-            Button("Movement+", 
-                ref rocketBoots);
             Button("Instant Kill", 
                 ref instantKill);
-            Button("Close Menu",
-                ref Toggle);
             // Fuck it
             w += 105; h = Screen.height / 3;
             GUI.contentColor = new Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
             GUI.Label(AfterLabel(), "-Commands");
+                Button("Close Menu", ref Toggle);
             //Label(5, 3, 600, 400, last_error);
         }
         public Rect AfterButton()
