@@ -74,30 +74,21 @@ namespace BeanAssembly
         void UpdateLocal()
         {
             // Change Weapon Manager Values
-            var equips = localPlayer.GetComponent<WeaponManager>();
             var active = equips.weapons[equips.currentWeapon];
-            // Zero Recoil Values
-            if (Interface.noRecoil || true) {
-                active.additionalSideKick = 0f;
-                active.verticalKick = 0f;
-                active.sideKick = 0f;
-            }
             // Better Shot Handling
             active.bulletSpeed = 1e6f;
             active.reloadTime = 1e-9f;
             active.reloading = false;
             active.currentclip = 95;
-            // Meme Shit
-            if (Interface.autoFire) {
-                //active.fullAuto = true;
-                //active.recoveryTime = 1e-6f;
-                //active.shotgun = true;
-            }
             // Friendly Fire
             localPlayer.rTeams = 
                 Interface.friendlyFire;
             foreach (var feature in features)
-                try { feature.UpdateLocal(); } catch {}
+                try { feature.UpdateLocal(); } catch 
+                (Exception e) {
+                    Interface.last_error = 
+                        e.Message + '\n' + e.StackTrace;
+                }
         }
     }
     abstract class Feature
@@ -109,20 +100,20 @@ namespace BeanAssembly
         // Store Defaults
         public void StoreDefaults<T>(T src, ref T dest)
         {
-            if (dest.Equals(src))
+            if (src.Equals(dest))
                 return; dest = src;
-            var fields = GetType().GetFields(BindingFlags.Static);
+            var fields = GetType().GetFields(BindingFlags.Static | BindingFlags.NonPublic);
             foreach (var field in fields)
                 field.SetValue(this, typeof(T).GetField(field.Name,
-            BindingFlags.Static | BindingFlags.NonPublic).GetValue(src));
+            BindingFlags.Instance | BindingFlags.Public).GetValue(src));
         }
         // Load Defaults
         public void LoadDefaults<T>(T obj)
         {
-            var fields = GetType().GetFields(BindingFlags.Static);
+            var fields = GetType().GetFields(BindingFlags.Static | BindingFlags.NonPublic);
             foreach (var field in fields)
-                typeof(T).GetField(field.Name, BindingFlags.Static | BindingFlags
-                    .NonPublic).SetValue(obj, field.GetValue(this));
+                typeof(T).GetField(field.Name, BindingFlags.Instance | BindingFlags
+                    .Public).SetValue(obj, field.GetValue(this));
         }
     }
 }

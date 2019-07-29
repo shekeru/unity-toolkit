@@ -233,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features.cs" />
+    <Compile Include="Features\NoRecoil.cs" />
     <Compile Include="Features\ForceShotgun.cs" />
     <Compile Include="Interface.cs" />
     <Compile Include="Keybinds.cs" />

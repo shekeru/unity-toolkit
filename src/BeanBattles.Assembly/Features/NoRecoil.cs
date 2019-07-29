@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace BeanAssembly.Features
 {
-    class ForceShotgun : Feature
+    class NoRecoil : Feature
     {
         Weapon weapon;
         // Config
         public static bool Toggle;
         public static string Title
-            = "Auto-Shotgun";
+            = "No Recoil";
         // Defaults
-        static bool fullAuto;
-        static float recoveryTime;
-        static bool shotgun;
+        static float verticalKick;
+        static float additionalSideKick;
+        static float sideKick;
         // Logics
         public override void UpdateLocal()
         {
@@ -25,9 +25,9 @@ namespace BeanAssembly.Features
                 [Instance.equips.currentWeapon], ref weapon);
             // Fucking Hell
             if (Toggle) {
-                weapon.fullAuto = true;
-                weapon.recoveryTime = 1e-6f;
-                weapon.shotgun = true;
+                weapon.verticalKick = 0f;
+                weapon.additionalSideKick = 0f;
+                weapon.sideKick = 0f;
             } else
                 LoadDefaults(weapon);
         }

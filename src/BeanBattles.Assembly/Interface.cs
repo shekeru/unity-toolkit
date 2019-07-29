@@ -9,15 +9,17 @@ namespace BeanAssembly
         int w, h;
         // Statics
         public static bool Toggle = true;
-        public const string Name = "Niggyhook, Version 5.5.4";
+        public const string Name = "Niggyhook, Version 5.6.0";
         // Toggles
         public static bool
             instantKill, noRecoil, autoFire, 
             rocketBoots, friendlyFire;
+        public static string last_error = "ok.none";
         // Create
         public Interface(string text)
         {
             w = Screen.width / 3; h = Screen.height / 3;
+            Cursor.lockState = CursorLockMode.None;
             GUI.Box(new Rect(w, h, w, h), text);
             // Experimental
             Button("No Recoil",
@@ -32,6 +34,7 @@ namespace BeanAssembly
                 ref instantKill);
             Button("Close Menu",
                 ref Toggle);
+            Label(5, 3, 600, 400, last_error);
         }
         public Rect NextSlot()
         {

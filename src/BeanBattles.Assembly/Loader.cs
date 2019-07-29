@@ -11,6 +11,7 @@ namespace BeanAssembly
     // Loading Component
     public class Loader
     {
+        // Unity Loader
         static UnityEngine.GameObject gameObject;
         public static void Load()
         {
@@ -31,6 +32,7 @@ namespace BeanAssembly
         public static List<Feature> features;
         public static List<GameObject> players;
         // Managers
+        public static WeaponManager equips;
         public static GameManager gameManager;
         public static CustomNetworkManager netManager;
         public static ServerManager serverManager;
@@ -41,11 +43,14 @@ namespace BeanAssembly
         // Init Everything
         public void Start()
         {
+            // Init Lists
+            features = new List<Feature>();
             players = new List<GameObject>();
             keys = new KeyManager();
             // Add Features
             features.Add(new 
                 Features.ForceShotgun());
+            // Hello World
         }
         // Disregard Frame Skips for now
         public void Update()
@@ -55,8 +60,9 @@ namespace BeanAssembly
             gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
             localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
             extras = gameManager.myPlayer.GetComponent<Extras>(); keys.Update();
-            Interface.Toggle ^= keys[KeyManager.Interface];
-            // Update Players
+            equips = localPlayer.GetComponent<WeaponManager>(); Interface.Toggle 
+                ^= keys[KeyManager.Interface];
+            // Begin Updates
             foreach (var player in gameManager.players) {
                 try { UpdatePlayer(player); } catch { };
             }; UpdateLocal();
