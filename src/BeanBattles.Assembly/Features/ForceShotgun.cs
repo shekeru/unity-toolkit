@@ -11,9 +11,8 @@ namespace BeanAssembly.Features
     {
         Weapon weapon;
         // Config
-        public static bool Toggle;
-        public static string Title
-            = "Auto-Shotgun";
+        public override string
+            NAME => "Auto-Shotgun";
         // Defaults
         static bool fullAuto;
         static float recoveryTime;
@@ -24,7 +23,7 @@ namespace BeanAssembly.Features
             StoreDefaults(Instance.equips.weapons
                 [Instance.equips.currentWeapon], ref weapon);
             // Fucking Hell
-            if (Toggle) {
+            if (SIGNAL) {
                 weapon.fullAuto = true;
                 weapon.recoveryTime = 1e-6f;
                 weapon.shotgun = true;

@@ -11,9 +11,7 @@ namespace BeanAssembly.Features
     {
         Weapon weapon;
         // Config
-        public static bool Toggle;
-        public static string Title
-            = "No Recoil";
+        public override string NAME => "No Recoil";
         // Defaults
         static float verticalKick;
         static float additionalSideKick;
@@ -24,7 +22,7 @@ namespace BeanAssembly.Features
             StoreDefaults(Instance.equips.weapons
                 [Instance.equips.currentWeapon], ref weapon);
             // Fucking Hell
-            if (Toggle) {
+            if (SIGNAL) {
                 weapon.verticalKick = 0f;
                 weapon.additionalSideKick = 0f;
                 weapon.sideKick = 0f;

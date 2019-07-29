@@ -93,6 +93,9 @@ namespace BeanAssembly
     }
     abstract class Feature
     {
+        public virtual bool SIGNAL
+            { get; set; } = false;
+        public virtual string NAME { get; }
         // Update Other Players
         public virtual void UpdateLocal() {}
         // Update Local Player

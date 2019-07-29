@@ -9,7 +9,7 @@ namespace BeanAssembly
         int w, h;
         // Statics
         public static bool Toggle = true;
-        public const string Name = "Niggyhook, Version 5.6.0";
+        public const string Name = "Niggyhook, Version 5.6.2";
         // Toggles
         public static bool
             instantKill, noRecoil, autoFire, 
@@ -21,11 +21,19 @@ namespace BeanAssembly
             w = Screen.width / 3; h = Screen.height / 3;
             Cursor.lockState = CursorLockMode.None;
             GUI.Box(new Rect(w, h, w, h), text);
-            // Experimental
-            Button("No Recoil",
-                ref noRecoil);
-            Button(Features.ForceShotgun.Title, ref Features.
-                ForceShotgun.Toggle);
+            // New Features Method
+            GUI.contentColor = new Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
+            GUI.Label(AfterLabel(), "-Stable Features");
+            foreach (var feature in Instance.features) {
+                GUI.contentColor = feature.SIGNAL ?
+                    new Color(140 / 256f, 240 / 256f, 115 / 256f, 1f) 
+                    : new Color(242 / 256f, 107 / 256f, 44 / 256f, 1f);
+                feature.SIGNAL ^= GUI.Button(AfterButton(), feature.NAME);
+                GUI.contentColor = Color.white;
+            } // Continue
+            w += 105; h = Screen.height / 3;
+            GUI.contentColor = new Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
+            GUI.Label(AfterLabel(), "-Experimental");
             Button("Friendly Fire", 
                 ref friendlyFire);
             Button("Movement+", 
@@ -34,16 +42,24 @@ namespace BeanAssembly
                 ref instantKill);
             Button("Close Menu",
                 ref Toggle);
-            Label(5, 3, 600, 400, last_error);
+            // Fuck it
+            w += 105; h = Screen.height / 3;
+            GUI.contentColor = new Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
+            GUI.Label(AfterLabel(), "-Commands");
+            //Label(5, 3, 600, 400, last_error);
         }
-        public Rect NextSlot()
+        public Rect AfterButton()
         {
             return new Rect(w+5, h += 30, 100, 25);
+        }
+        public Rect AfterLabel()
+        {
+            return new Rect(w + 5, h += 25, 100, 25);
         }
         public void Button(string text, ref bool value)
         {
             GUI.contentColor = value ? Color.green : Color.red;
-            value ^= GUI.Button(NextSlot(), text);
+            value ^= GUI.Button(AfterButton(), text);
             GUI.contentColor = Color.white;
         }
         public static void Label(int x, int y, int w, int h, string text)

@@ -48,9 +48,10 @@ namespace BeanAssembly
             players = new List<GameObject>();
             keys = new KeyManager();
             // Add Features
+            features.Add(new
+                Features.NoRecoil());
             features.Add(new 
                 Features.ForceShotgun());
-            // Hello World
         }
         // Disregard Frame Skips for now
         public void Update()
