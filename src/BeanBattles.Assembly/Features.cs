@@ -75,6 +75,8 @@ namespace BeanAssembly
     {
         public virtual bool SIGNAL
             { get; set; } = false;
+        public virtual bool 
+            RESET { get; } = false;
         public virtual string NAME { get; }
         // Update Other Players
         public virtual void UpdateLocal() {}

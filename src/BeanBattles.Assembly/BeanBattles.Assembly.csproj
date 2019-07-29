@@ -233,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features.cs" />
+    <Compile Include="Features\Airstrike.cs" />
     <Compile Include="Features\AutoFire.cs" />
     <Compile Include="Features\FastReload.cs" />
     <Compile Include="Features\NoReload.cs" />
