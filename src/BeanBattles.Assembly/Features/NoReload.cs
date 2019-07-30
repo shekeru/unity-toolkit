@@ -6,6 +6,8 @@
         // Config
         public override string
             NAME => "No Reload";
+        public override int 
+            SECTION => 0;
         // Defaults
         // Logics
         public override void UpdateLocal()

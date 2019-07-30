@@ -6,6 +6,8 @@
         // Config
         public override string
             NAME => "Fast Reload";
+        public override int
+            SECTION => 0;
         // Defaults
         static float reloadTime;
         // Logics

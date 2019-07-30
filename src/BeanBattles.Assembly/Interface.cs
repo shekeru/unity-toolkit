@@ -2,19 +2,32 @@
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.Networking.Types;
+using UnityEngine.Networking.Match;
 
 namespace BeanAssembly
 {
     class Interface
     {
         int w, h;
-        // Statics
+        static Color Blue = new
+            Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
+        static Color Green = new
+            Color(140 / 256f, 240 / 256f, 115 / 256f, 1f);
+        static Color Red = new
+            Color(242 / 256f, 95 / 256f, 44 / 256f, 1f);
+        // Public Statics
         public static bool Toggle = true;
-        public const string Name = "Niggyhook, Version 5.6.8";
+        public const string Name = "Niggyhook, Version 5.6.9";
         // Toggles
         public static bool
             instantKill, friendlyFire;
         public static string last_error = "";
+        static string[] Headers = {
+            "-Stable Features-",
+            "-Experimental-",
+            "-Misc Triggers-"
+        };
         // Create
         public Interface(string text)
         {
@@ -22,27 +35,25 @@ namespace BeanAssembly
             Cursor.lockState = CursorLockMode.None;
             GUI.Box(new Rect(w, h, w, h), text);
             // New Features Method
-            GUI.contentColor = new Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
-            GUI.Label(AfterLabel(), "-Stable Features");
-            foreach (var feature in Instance.features) {
-                GUI.contentColor = feature.SIGNAL ?
-                    new Color(140 / 256f, 240 / 256f, 115 / 256f, 1f) 
-                    : new Color(242 / 256f, 107 / 256f, 44 / 256f, 1f);
-                feature.SIGNAL ^= GUI.Button(AfterButton(), feature.NAME);
-                GUI.contentColor = Color.white;
-            } // Continue
-            w += 105; h = Screen.height / 3;
-            GUI.contentColor = new Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
-            GUI.Label(AfterLabel(), "-Experimental");
+            for(int i = 0; i < Headers.Length; i++) {
+                var style = GUI.skin.GetStyle("Label");
+                style.alignment = TextAnchor.MiddleCenter;
+                    GUI.contentColor = Blue;
+                GUI.Label(AfterLabel(), Headers[i], style);
+                foreach (var feature in Instance.features)
+                {
+                        if (feature.SECTION != i) continue;
+                    GUI.contentColor = feature.SIGNAL ? Green : Red;
+                    feature.SIGNAL ^= GUI.Button(AfterButton(), feature.NAME);
+                    GUI.contentColor = Color.white;
+                } w += 105; h = Screen.height / 3;
+            } // Misc Shit
             Button("Friendly Fire", 
                 ref friendlyFire);
             Button("Instant Kill", 
                 ref instantKill);
-            // Fuck it
-            w += 105; h = Screen.height / 3;
-            GUI.contentColor = new Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
-            GUI.Label(AfterLabel(), "-Commands");
-                Button("Close Menu", ref Toggle);
+            Button("Close Menu", 
+                ref Toggle);
         //    Label(0, 0, 400, 20, last_error);
         }
         public Rect AfterButton()
@@ -86,21 +97,47 @@ namespace BeanAssembly
             sFriends.mySteamID = new Steamworks.CSteamID(76561198193871823);
             typeof(SteamPlayerInfo).GetField("mySteamID", BindingFlags.Instance |
                 BindingFlags.NonPublic).SetValue(steamInfo, sFriends.mySteamID);
-            netManager.playerName = steamInfo.steamDisplayName.text = "unity games";
+            netManager.playerName = steamInfo.steamDisplayName.text = "cats";
             // Basic Interface
             Interface.Label(Screen.width - 155, 0, 160, 35, Interface.Name);
             if (Interface.Toggle)
                 new Interface(Interface.Name);
+            // Edit MatchDatas
+            var matches = (MatchUp.Match[])typeof(CustomNetworkManager).GetField("matches",
+                BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager);
+            foreach (var listing in matches) {
+                listing.matchData["maxPlayers"] = 20;
+                //listing.matchData["matchIsFull"] = 0;
+            }
+            // Inspect Match Data
+            var menus = netManager.menuMatchPanel.GetComponentsInChildren<MenuMatch>();
+            GUI.Label(new Rect(10, 76, 400, 25), "Matches: " + menus.Length.ToString());
+            foreach (var menu in menus) {
+                menu.fullText.gameObject.SetActive(false);
+                menu.buttonObj.gameObject.SetActive(true);
+            }
             // Bypass cocksucker passwords
             var match = ((MatchUp.Match) typeof(CustomNetworkManager).GetField("tryingToJoinMatch",
                BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager)).matchData;
             netManager.passwordEntryInput.text = match["Match Password"];
             netManager.passwordEntryTitle.text =
                 match["externalIP"] + ":" + match["port"];
-            // Debug Print
-            //int position = 110;
-            //foreach (var key in match) GUI.Label(new
-            //    Rect(10, position += 22, 400, 25), key.ToString());
+        }
+        public void FixedUpdate()
+        {
+            // Fuck Full Servers
+            gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
+            localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
+            localPlayer.Chat("--debug", false, false);
+                localPlayer.CallCmdKickPlayer(-1);
+                localPlayer.CallCmdKickPlayer(1);
+                localPlayer.CallCmdKickPlayer(2);
+            //foreach (var player in gameManager.players)
+            //{
+            //    var local = player.GetComponent<SetUpLocalPlayer>();
+            //    if(local.playerConnectionNumber > 0)
+            //        localPlayer.CallCmdKickPlayer(local.playerConnectionNumber);
+            //}                    
         }
     }
 }

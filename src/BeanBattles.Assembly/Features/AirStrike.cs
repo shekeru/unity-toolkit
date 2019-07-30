@@ -6,8 +6,8 @@
         // Config
         public override string
             NAME => "Airstrike(All)";
-        public override bool 
-            RESET => true;
+        public override int
+            SECTION => 2;
         // Logics
         public override void UpdatePlayer()
         {

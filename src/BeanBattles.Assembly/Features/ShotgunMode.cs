@@ -6,6 +6,8 @@
         // Config
         public override string
             NAME => "Shotgun Mode";
+        public override int
+            SECTION => 0;
         // Defaults
         static bool shotgun;
         // Logics

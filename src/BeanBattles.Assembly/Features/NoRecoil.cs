@@ -13,6 +13,8 @@ namespace BeanAssembly.Features
         // Config
         public override string 
             NAME => "No Recoil";
+        public override int
+            SECTION => 0;
         // Defaults
         static float verticalKick;
         static float additionalSideKick;

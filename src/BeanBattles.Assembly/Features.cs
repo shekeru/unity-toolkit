@@ -14,22 +14,21 @@ namespace BeanAssembly
     {
         void UpdatePlayer(GameObject player)
         {
+            localPlayer.CallCmdPlayerReadyUp(player);
+            // Setting Statements
             var movement = player.GetComponent<Movement>();
             var local = player.GetComponent<SetUpLocalPlayer>();
                 if (movement.isLocalPlayer) return;
-            // Remove Ready Screens
-            localPlayer.CallCmdPlayerReadyUp(player);
+            // Main Kick Exploits
             if (keys[KeyManager.KickPlayers])
             {
-                if(local.playerConnectionNumber > 2)
+                if(local.playerConnectionNumber > 0)
                     localPlayer.CallCmdKickPlayer(local.playerConnectionNumber);
-                //localPlayer.CallCmdSetUpServerPlayer(player, -1, "0");
-                //localPlayer.CallCmdSetUpServerPlayer(player, 0, "-1");
             }
             if (keys[KeyManager.Duplicate])
             {
                 localPlayer.CallCmdSetUpServerPlayer(player, -1, "0");
-                localPlayer.CallCmdSetUpServerPlayer(player, 0, "-1");
+                localPlayer.CallCmdSetUpServerPlayer(player, 0, "0");
             }
             // Display Players
             if (!players.Contains(player) && local.pname != "player" &&
@@ -100,8 +99,8 @@ namespace BeanAssembly
     {
         public virtual bool SIGNAL
             { get; set; } = false;
-        public virtual bool 
-            RESET { get; } = false;
+        public virtual int
+            SECTION { get; } = 1;
         public virtual string NAME { get; }
         // Update Other Players
         public virtual void UpdateLocal() {}
