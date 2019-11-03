@@ -8,7 +8,8 @@ namespace WinterAssembly
     class KeyManager : Dictionary<KeyCode, bool>
     {
         public const KeyCode
-            Interface = KeyCode.Insert;
+            Interface = KeyCode.Insert,
+            Testing = KeyCode.Keypad5;
         // Logic
         public KeyManager()
         {

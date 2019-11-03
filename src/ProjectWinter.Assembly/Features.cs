@@ -11,9 +11,6 @@ namespace WinterAssembly
 {
     partial class Instance
     {
-        void UpdatePlayer(GameObject player)
-        {
-        }
         void UpdateLocal()
         {
             foreach (var feature in features)

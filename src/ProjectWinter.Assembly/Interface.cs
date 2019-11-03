@@ -9,18 +9,35 @@ using TMPro;
 
 namespace WinterAssembly
 {
+    class Print {
+        public Color color = Color.white;
+        public int x, y, w, h; public GUIStyle style;
+        public Print(int x, int y, int w, int h) {
+            this.x = x; this.y = y; this.w = w; this.h = h;
+            style = GUI.skin.GetStyle("Label");
+        }
+        public void SetColor(int r, int g, int b) {
+            color = new Color(r / 256f, g / 256f, b / 256f, 1f);
+        }
+        public void Label(string text)
+        {
+            GUI.contentColor = color;
+            GUI.Label(new Rect(x, y, w, h), text, style);
+            y += h;
+        }
+    }
     class Interface
     {
         int w, h;
-        static Color Blue = new
+        public static Color Blue = new
             Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
-        static Color Green = new
+        public static Color Green = new
             Color(140 / 256f, 240 / 256f, 115 / 256f, 1f);
-        static Color Red = new
+        public static Color Red = new
             Color(242 / 256f, 95 / 256f, 44 / 256f, 1f);
         // Public Statics
+        public const string Name = "hrtWare-0.1.3";
         public static bool Toggle = true;
-        public const string Name = "hrtWare-0.1.0";
         // Toggles
         public static bool
             instantKill, friendlyFire;
@@ -43,15 +60,17 @@ namespace WinterAssembly
                 style.alignment = TextAnchor.MiddleCenter;
                 GUI.contentColor = Blue;
                 GUI.Label(AfterLabel(), Headers[i], style);
+                foreach (var feature in Instance.features)
+                {
+                    if (feature.SECTION != i) continue;
+                    GUI.contentColor = feature.SIGNAL ? Green : Red;
+                    feature.SIGNAL ^= GUI.Button(AfterButton(), feature.NAME);
+                    GUI.contentColor = Color.white;
+                }
                 w += 105; h = Screen.height / 3;
             } // Misc Shit
-            Button("Friendly Fire",
-                ref friendlyFire);
-            Button("Instant Kill",
-                ref instantKill);
             Button("Close Menu",
                 ref Toggle);
-            //    Label(0, 0, 400, 20, last_error);
         }
         public Rect AfterButton()
         {
@@ -67,21 +86,34 @@ namespace WinterAssembly
             value ^= GUI.Button(AfterButton(), text);
             GUI.contentColor = Color.white;
         }
-        public static void Label(int x, int y, int w, int h, string text)
-        {
-            GUI.contentColor = new Color(140 / 256f, 240 / 256f, 115 / 256f, 1f);
-            GUI.Label(new Rect(x, y, w, h), text);
-            GUI.contentColor = Color.white;
-        }
     }
     partial class Instance : MonoBehaviour
     {
         public void OnGUI()
         {
             // Basic Interface
-            Interface.Label(0, 0, 150, 15, Interface.Name);
+            var header = new Print(2, 0, 1500, 20);
+            header.color = Interface.Blue;
+            header.style.alignment = 
+                TextAnchor.UpperLeft;
+            header.Label(Interface.Name);
+            // Overlay
             if (Interface.Toggle)
                 new Interface(Interface.Name);
+            // Testing Features
+            header.y += 250;
+            var account = PrivateField<AccountHandler>(game.PlayFabRef, "m_account");
+            header.Label(account.GetPlayerName());
+            var players = PrivateField<Dictionary<int, PlayerData>>(game.LevelManagerRef, "players");
+            foreach (var entry in players) {
+                var player = level.GetPlayerHandler(entry.Key, true);
+                header.color = Color.magenta;
+                // Display List
+                header.Label("[" + entry.Key.ToString() + ", " 
+                    + player.PlayerClass.ToString() + "]: "
+                    + player.PlayerName.ToString().StripNoParse() + " -- "
+                    + player.CurrentHealth.ToString());
+            };
         }
         public void FixedUpdate()
         {
