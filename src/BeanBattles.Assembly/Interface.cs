@@ -119,25 +119,20 @@ namespace BeanAssembly
             // Bypass cocksucker passwords
             var match = ((MatchUp.Match) typeof(CustomNetworkManager).GetField("tryingToJoinMatch",
                BindingFlags.NonPublic | BindingFlags.Instance).GetValue(netManager)).matchData;
+            qbool = match["matchIsFull"] > 0;
             netManager.passwordEntryInput.text = match["Match Password"];
             netManager.passwordEntryTitle.text =
                 match["externalIP"] + ":" + match["port"];
         }
+        bool qbool;
         public void FixedUpdate()
         {
             // Fuck Full Servers
             gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
             localPlayer = gameManager.myPlayer.GetComponent<SetUpLocalPlayer>();
-            localPlayer.Chat("--debug", false, false);
-                localPlayer.CallCmdKickPlayer(-1);
-                localPlayer.CallCmdKickPlayer(1);
-                localPlayer.CallCmdKickPlayer(2);
-            //foreach (var player in gameManager.players)
-            //{
-            //    var local = player.GetComponent<SetUpLocalPlayer>();
-            //    if(local.playerConnectionNumber > 0)
-            //        localPlayer.CallCmdKickPlayer(local.playerConnectionNumber);
-            //}                    
+            if(qbool)
+                for (int i = 1; i < 17; i++)
+                    localPlayer.CallCmdKickPlayer(i);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Injector.Console
     {
         private static void Main(string[] args)
         {
-            Injector injector = new Injector("BeanBattles");
+            Injector injector = new Injector("ProjectWinter");
             Inject(injector);
         }
 
@@ -22,8 +22,8 @@ namespace Injector.Console
 
         private static void Inject(Injector injector)
         {
-            string assemblyPath = "BeanBattles.dll",
-                @namespace = "BeanAssembly",
+            string assemblyPath = "ProjectWinter.dll",
+                @namespace = "WinterAssembly",
                 className = "Loader",
                 methodName = "Load";
             byte[] assembly;
