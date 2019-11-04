@@ -54,6 +54,12 @@ namespace WinterAssembly
                 Features.EmoteAsync());
             features.Add(new
                 Features.NewPerson());
+            features.Add(new
+                Features.ForceTraitors());
+            features.Add(new
+                Features.ChangeRole());
+            features.Add(new
+                Features.Reconnect());
             Update();
         }
         // Disregard Frame Skips for now
@@ -67,13 +73,17 @@ namespace WinterAssembly
             Interface.Toggle ^= keys[KeyManager.Interface];
             keys.Update(); UpdateLocal(); BypassPasswords();
             // Update Game Settings
-            PhotonNetwork.playerName = "cats";
             ForceValue(game.SteamDLCManagerRef,
                 "hasSupernaturalDLCPurchased", true);
-            game.playFabId = "cats";
-            var exiles = PrivateField<Dictionary<int, bool>>(level.ExileManagerRef, "isExiled");
-                exiles[PhotonNetwork.player.ID] = false;
-            level.ExileManagerRef.ForceGlobalExile(false);
+            PhotonNetwork.playerName = "Lauren";
+            game.playFabId = "cats2";
+            // testing
+            //GameManager.IsServerCheckRequired = false;
+            //game.PlayFabRef.playFabStatus = ConnectionManager.EStatus.ONLINE;
+            // Meh
+            //var exiles = PrivateField<Dictionary<int, bool>>(level.ExileManagerRef, "isExiled");
+            //    exiles[PhotonNetwork.player.ID] = false;
+            //level.ExileManagerRef.ForceGlobalExile(false);
             // Fuck Niggers
         }
     }

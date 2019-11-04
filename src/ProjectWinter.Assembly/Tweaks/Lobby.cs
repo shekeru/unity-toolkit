@@ -26,6 +26,7 @@ namespace WinterAssembly
                     // Swap Values
                     input.inputType = TMP_InputField.InputType.Standard;
                     input.text = popup.password;
+                    // Force Join
                 }
                 catch { }
             }

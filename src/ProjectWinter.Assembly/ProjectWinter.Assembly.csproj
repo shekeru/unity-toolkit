@@ -35,6 +35,9 @@
   <ItemGroup>
     <Compile Include="Features.cs" />
     <Compile Include="Features\AddStats.cs" />
+    <Compile Include="Features\Reconnect.cs" />
+    <Compile Include="Features\ChangeRole.cs" />
+    <Compile Include="Features\ForceTraitors.cs" />
     <Compile Include="Features\NewPerson.cs" />
     <Compile Include="Features\EmoteAsync.cs" />
     <Compile Include="Features\BreakSpine.cs" />
@@ -58,7 +61,7 @@
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Project Winter\ProjectWinter_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Project Winter\ProjectWinter_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>

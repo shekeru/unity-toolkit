@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace WinterAssembly.Features
 {
@@ -32,7 +33,15 @@ namespace WinterAssembly.Features
                 if (hunger.CurrentValue < hunger.maxValue)
                     hunger.RestoreStat(75, false, false);
                 //SIGNAL = !SIGNAL;
-            }
+                PlayerHandler.LocalPlayerInstance.cooldownDuration = 0f;
+                //var inv = PlayerHandler.LocalPlayerInstance
+                //    .PlayerInventoryHandlerRef.PlayerInventoryRef;
+                var invCtrl = Instance.level.HUDManagerRef.PlayerInventoryControllerRef;
+                var cooldown = Instance.PrivateField<ItemUICooldownController>
+                    (invCtrl, "uiCooldownController");
+                 cooldown.SetFill(1000f);
+                //inv.InventoryUpdated = delegate (ItemSlot s){};
+    }
         }
     }
 }

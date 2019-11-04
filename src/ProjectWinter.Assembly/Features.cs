@@ -20,6 +20,17 @@ namespace WinterAssembly
                         e.Message + '\n' + e.StackTrace;
                 } // Misc Features
         }
+        void UpdateGUI()
+        {
+            foreach (var feature in features)
+                try { feature.UpdateGUI(); }
+                catch
+                (Exception e)
+                {
+                    Interface.last_error =
+                        e.Message + '\n' + e.StackTrace;
+                } // Misc Features
+        }
     }
     abstract class Feature
     {
@@ -28,10 +39,10 @@ namespace WinterAssembly
         public virtual int
             SECTION { get; } = 1;
         public virtual string NAME { get; }
-        // Update Other Players
+        // Update Local Players
         public virtual void UpdateLocal() {}
-        // Update Local Player
-        public virtual void UpdatePlayer() {}
+        // Update GUI Display
+        public virtual void UpdateGUI() { }
         // Store Defaults
         public void StoreDefaults<T>(T src, ref T dest)
         {

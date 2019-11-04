@@ -22,13 +22,14 @@ namespace WinterAssembly
         public void Label(string text)
         {
             GUI.contentColor = color;
+            style.alignment = TextAnchor.UpperLeft;
             GUI.Label(new Rect(x, y, w, h), text, style);
             y += h;
         }
     }
     class Interface
     {
-        int w, h;
+        public int x, y, w, h;
         public static Color Blue = new
             Color(119 / 256f, 174 / 256f, 230 / 256f, 1f);
         public static Color Green = new
@@ -50,35 +51,47 @@ namespace WinterAssembly
         // Create
         public Interface(string text)
         {
-            w = Screen.width / 3; h = Screen.height / 3;
-            Cursor.lockState = CursorLockMode.None;
-            GUI.Box(new Rect(w, h, w, h), text);
-            // New Features Method
-            for (int i = 0; i < Headers.Length; i++)
+            if (text == Interface.Name)
+                DefaultMenu();
+            else
             {
-                var style = GUI.skin.GetStyle("Label");
-                style.alignment = TextAnchor.MiddleCenter;
-                GUI.contentColor = Blue;
-                GUI.Label(AfterLabel(), Headers[i], style);
-                foreach (var feature in Instance.features)
-                {
-                    if (feature.SECTION != i) continue;
-                    GUI.contentColor = feature.SIGNAL ? Green : Red;
-                    feature.SIGNAL ^= GUI.Button(AfterButton(), feature.NAME);
-                    GUI.contentColor = Color.white;
-                }
-                w += 105; h = Screen.height / 3;
-            } // Misc Shit
-            Button("Close Menu",
-                ref Toggle);
+                x = Screen.width / 3;
+                y = Screen.height / 3;
+                w = x * 2; h = y * 2;
+                //GUI.Box(new Rect(x, y, w, h), text);
+            }
         }
+        public void DefaultMenu() {
+            x = w = Screen.width / 3;
+            y = h = Screen.height / 3;
+            Cursor.lockState = CursorLockMode.None;
+            GUI.Box(new Rect(x, y, w, h), Interface.Name);
+            // New Features Methods
+            for (int i = 0; i < Headers.Length; i++)
+                {
+                    var style = GUI.skin.GetStyle("Label");
+                    style.alignment = TextAnchor.MiddleCenter;
+                    GUI.contentColor = Blue;
+                    GUI.Label(AfterLabel(), Headers[i], style);
+                    foreach (var feature in Instance.features)
+                    {
+                        if (feature.SECTION != i) continue;
+                        GUI.contentColor = feature.SIGNAL ? Green : Red;
+                        feature.SIGNAL ^= GUI.Button(AfterButton(), feature.NAME);
+                        GUI.contentColor = Color.white;
+                    }
+                    x += 105; y = Screen.height / 3;
+                } // Misc Shit
+                Button("Close Menu",
+                    ref Toggle);
+            }
         public Rect AfterButton()
         {
-            return new Rect(w + 5, h += 30, 100, 25);
+            return new Rect(x + 5, y += 30, 100, 25);
         }
         public Rect AfterLabel()
         {
-            return new Rect(w + 5, h += 25, 100, 25);
+            return new Rect(x + 5, y += 25, 100, 25);
         }
         public void Button(string text, ref bool value)
         {
@@ -100,20 +113,31 @@ namespace WinterAssembly
             // Overlay
             if (Interface.Toggle)
                 new Interface(Interface.Name);
+            UpdateGUI();
             // Testing Features
-            header.y += 250;
-            var account = PrivateField<AccountHandler>(game.PlayFabRef, "m_account");
-            header.Label(account.GetPlayerName());
-            var players = PrivateField<Dictionary<int, PlayerData>>(game.LevelManagerRef, "players");
-            foreach (var entry in players) {
-                var player = level.GetPlayerHandler(entry.Key, true);
-                header.color = Color.magenta;
-                // Display List
-                header.Label("[" + entry.Key.ToString() + ", " 
-                    + player.PlayerClass.ToString() + "]: "
-                    + player.PlayerName.ToString().StripNoParse() + " -- "
-                    + player.CurrentHealth.ToString());
-            };
+            header.y += 250; header.x = 2;
+            PhotonNetwork.AuthValues.UserId = "cats";
+            header.Label(PhotonNetwork.AuthValues.UserId);
+            header.Label(PhotonNetwork.AuthValues.AuthGetParameters);
+            if (game.ConnectionManagerRef.gameStatus != ConnectionManager.EStatus.ONLINE)
+                game.ConnectionManagerRef.ChangeGameStatus(ConnectionManager.EStatus.ONLINE);
+            try
+            {
+                var players = PrivateField<Dictionary<int, PlayerData>>(game.LevelManagerRef, "players");
+                foreach (var entry in players)
+                {
+                    var player = level.GetPlayerHandler(entry.Key, true);
+                    header.color = Color.magenta;
+                    // Display List
+                    header.Label("[" + entry.Key.ToString() + ", "
+                        + player.PlayerClass.ToString() + "]: "
+                        + player.PlayerName.ToString().StripNoParse() + " -- "
+                        + player.CurrentHealth.ToString());
+                };
+            }
+            catch {
+
+            }
         }
         public void FixedUpdate()
         {

@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Injector.Console", "Injecto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectWinter.Assembly", "ProjectWinter.Assembly\ProjectWinter.Assembly.csproj", "{0887773C-D056-443A-9327-CA5BB47480F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityToolkit", "UnityToolkit\UnityToolkit.csproj", "{920B9452-3191-4422-8197-D6DDDF59D99E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{0887773C-D056-443A-9327-CA5BB47480F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0887773C-D056-443A-9327-CA5BB47480F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0887773C-D056-443A-9327-CA5BB47480F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{920B9452-3191-4422-8197-D6DDDF59D99E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{920B9452-3191-4422-8197-D6DDDF59D99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{920B9452-3191-4422-8197-D6DDDF59D99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{920B9452-3191-4422-8197-D6DDDF59D99E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
